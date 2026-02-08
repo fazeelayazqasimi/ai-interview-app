@@ -1,0 +1,370 @@
+.video-interview {
+  padding: 40px 20px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.interview-header {
+  text-align: center;
+  margin-bottom: 50px;
+}
+
+.interview-header h1 {
+  color: #00ff00;
+  font-size: 42px;
+  margin-bottom: 10px;
+}
+
+.interview-header p {
+  color: #aaa;
+  font-size: 18px;
+}
+
+/* Setup Section */
+.interview-setup {
+  display: flex;
+  justify-content: center;
+  padding: 40px 0;
+}
+
+.setup-card {
+  background: rgba(20, 20, 20, 0.9);
+  border: 1px solid #00ff00;
+  border-radius: 16px;
+  padding: 40px;
+  width: 100%;
+  max-width: 500px;
+  text-align: center;
+}
+
+.setup-card h2 {
+  color: #00ff00;
+  margin-bottom: 30px;
+  font-size: 28px;
+}
+
+.setup-input {
+  width: 100%;
+  padding: 14px 20px;
+  margin-bottom: 30px;
+  background: rgba(40, 40, 40, 0.8);
+  border: 1px solid #333;
+  border-radius: 8px;
+  color: #fff;
+  font-size: 16px;
+  transition: all 0.3s;
+}
+
+.setup-input:focus {
+  outline: none;
+  border-color: #00ff00;
+  box-shadow: 0 0 15px rgba(0, 255, 0, 0.2);
+}
+
+.start-btn {
+  width: 100%;
+  padding: 16px;
+  background: linear-gradient(135deg, #00ff00 0%, #00cc00 100%);
+  border: none;
+  border-radius: 8px;
+  color: #000;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s;
+  margin-bottom: 30px;
+}
+
+.start-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 30px rgba(0, 255, 0, 0.3);
+}
+
+.setup-tips {
+  text-align: left;
+  padding-top: 30px;
+  border-top: 1px solid #333;
+}
+
+.setup-tips h3 {
+  color: #fff;
+  margin-bottom: 15px;
+  font-size: 20px;
+}
+
+.setup-tips ul {
+  list-style: none;
+  padding: 0;
+}
+
+.setup-tips li {
+  color: #aaa;
+  margin-bottom: 10px;
+  padding-left: 20px;
+  position: relative;
+}
+
+.setup-tips li:before {
+  content: "✓";
+  color: #00ff00;
+  position: absolute;
+  left: 0;
+}
+
+/* Interview Container */
+.interview-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 30px;
+}
+
+.interview-left, .interview-right {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+.question-card {
+  background: rgba(20, 20, 20, 0.9);
+  border: 1px solid #00ff00;
+  border-radius: 12px;
+  padding: 30px;
+}
+
+.question-card h3 {
+  color: #00ff00;
+  margin-bottom: 20px;
+  font-size: 20px;
+}
+
+.current-question {
+  color: #fff;
+  font-size: 18px;
+  line-height: 1.6;
+  margin-bottom: 25px;
+  padding: 20px;
+  background: rgba(0, 255, 0, 0.05);
+  border-radius: 8px;
+  border-left: 4px solid #00ff00;
+}
+
+.recording-status {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px;
+  background: rgba(40, 40, 40, 0.8);
+  border-radius: 8px;
+}
+
+.status-indicator {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #aaa;
+}
+
+.status-indicator.recording {
+  color: #ff0000;
+}
+
+.status-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #666;
+}
+
+.status-indicator.recording .status-dot {
+  background: #ff0000;
+  animation: pulse 1s infinite;
+}
+
+.recording-controls {
+  display: flex;
+  gap: 10px;
+}
+
+.record-btn {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.record-btn.start {
+  background: rgba(255, 0, 0, 0.2);
+  color: #ff0000;
+  border: 1px solid #ff0000;
+}
+
+.record-btn.stop {
+  background: rgba(255, 0, 0, 0.3);
+  color: #fff;
+  border: 1px solid #ff0000;
+}
+
+.record-btn:hover {
+  transform: translateY(-2px);
+}
+
+/* Answer Section */
+.answer-section {
+  background: rgba(20, 20, 20, 0.9);
+  border: 1px solid #333;
+  border-radius: 12px;
+  padding: 30px;
+}
+
+.answer-section h3 {
+  color: #fff;
+  margin-bottom: 20px;
+  font-size: 20px;
+}
+
+.answer-input {
+  width: 100%;
+  padding: 15px;
+  background: rgba(40, 40, 40, 0.8);
+  border: 1px solid #333;
+  border-radius: 8px;
+  color: #fff;
+  font-size: 16px;
+  line-height: 1.5;
+  resize: vertical;
+  min-height: 150px;
+  margin-bottom: 20px;
+  transition: all 0.3s;
+}
+
+.answer-input:focus {
+  outline: none;
+  border-color: #00ff00;
+  box-shadow: 0 0 15px rgba(0, 255, 0, 0.1);
+}
+
+.answer-actions {
+  display: flex;
+  gap: 15px;
+}
+
+.skip-btn, .submit-btn {
+  flex: 1;
+  padding: 14px;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.skip-btn {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  border: 1px solid #666;
+}
+
+.submit-btn {
+  background: linear-gradient(135deg, #00ff00 0%, #00cc00 100%);
+  color: #000;
+}
+
+.skip-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.submit-btn:hover {
+  background: linear-gradient(135deg, #00cc00 0%, #00aa00 100%);
+  transform: translateY(-2px);
+}
+
+/* Video Preview */
+.video-preview {
+  background: rgba(20, 20, 20, 0.9);
+  border: 1px solid #333;
+  border-radius: 12px;
+  padding: 30px;
+}
+
+.video-preview h3 {
+  color: #fff;
+  margin-bottom: 20px;
+  font-size: 20px;
+}
+
+.camera-feed {
+  width: 100%;
+  aspect-ratio: 16/9;
+  background: #000;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  border: 2px solid #333;
+}
+
+.recorded-video h4 {
+  color: #aaa;
+  margin: 20px 0 10px;
+  font-size: 16px;
+}
+
+.playback-video {
+  width: 100%;
+  aspect-ratio: 16/9;
+  background: #000;
+  border-radius: 8px;
+  border: 2px solid #00ff00;
+}
+
+/* Questions History */
+.questions-history {
+  background: rgba(20, 20, 20, 0.9);
+  border: 1px solid #333;
+  border-radius: 12px;
+  padding: 30px;
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.questions-history h3 {
+  color: #fff;
+  margin-bottom: 20px;
+  font-size: 20px;
+}
+
+.history-item {
+  padding: 15px;
+  margin-bottom: 15px;
+  background: rgba(40, 40, 40, 0.8);
+  border-radius: 8px;
+  border-left: 3px solid #00ff00;
+}
+
+.history-question {
+  color: #fff;
+  margin-bottom: 10px;
+  line-height: 1.5;
+}
+
+.history-answer {
+  color: #aaa;
+  line-height: 1.5;
+  font-size: 14px;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .interview-container {
+    grid-template-columns: 1fr;
+  }
+}

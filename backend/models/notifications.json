@@ -1,0 +1,18 @@
+[
+  {
+    "user_email": "energymart@gmail.com",
+    "user_type": "company",
+    "message": "New application received for DEveloper",
+    "type": "info",
+    "read": true,
+    "data": {
+      "application_id": "3",
+      "job_id": "3",
+      "job_title": "DEveloper",
+      "candidate_email": "fazeel@gmail.com"
+    },
+    "id": "1",
+    "created_at": "2026-02-09T03:36:11.605879",
+    "read_at": "2026-02-09T03:36:54.804828"
+  }
+]

@@ -1,0 +1,17 @@
+[
+  {
+    "email": "fazeel@gmail.com",
+    "name": "Fazeel Ayaz Qasimi",
+    "skills": [
+      "React",
+      "Nodejs",
+      "MongoDB"
+    ],
+    "experience": "3 years of experience",
+    "education": "Intrmediate",
+    "bio": "i have learn from SMIT",
+    "resume_url": "",
+    "phone": "",
+    "location": ""
+  }
+]

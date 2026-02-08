@@ -1,0 +1,13 @@
+[
+  {
+    "type": "candidate",
+    "email": "abc@xyz.com",
+    "password": "123"
+  },
+  {
+    "name": "fazeel",
+    "email": "fazeel@gmail.com",
+    "password": "123456",
+    "type": "candidate"
+  }
+]

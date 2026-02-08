@@ -1,0 +1,98 @@
+[
+  {
+    "id": "1",
+    "title": "Frontend Developer",
+    "description": "Build amazing user interfaces",
+    "requirements": [
+      "React",
+      "JavaScript",
+      "CSS"
+    ],
+    "location": "Remote",
+    "salary": "$80,000 - $120,000",
+    "tags": [
+      "React",
+      "Frontend"
+    ],
+    "company_email": "test@company.com",
+    "company_name": "Test Company",
+    "status": "open",
+    "created_date": "2024-01-15T10:30:00Z"
+  },
+  {
+    "title": "MArketer",
+    "description": "We are looking for a motivated and results-driven Marketer to join our on-site team. The ideal candidate will be responsible for planning and executing marketing campaigns, managing social media platforms, generating leads, and supporting sales growth. This role requires creativity, strong communication skills, and the ability to work closely with the team to achieve business targets.",
+    "requirements": [
+      "Strong communication & negotiation skills",
+      "Social media marketing ka experience",
+      "Facebook & Instagram ads chalana aata ho",
+      "Basic graphic sense (Canva/Photoshop)",
+      "Lead generation aur conversion ka experience",
+      "Content planning aur posting strategy aati ho",
+      "On-site kaam kar sakta ho",
+      "Team ke sath coordinate kar sakta ho",
+      "Sales mindset aur target-oriented approach",
+      "Reporting aur basic analytics samajhta ho"
+    ],
+    "location": "On-site",
+    "salary": "30000",
+    "tags": [
+      "marketing",
+      "digital marketing",
+      "social media marketing",
+      "facebook ads",
+      "instagram ads",
+      "lead generation",
+      "content marketing",
+      "performance marketing",
+      "on-site job",
+      "mid level",
+      "sales support",
+      "advertising",
+      "brand marketing",
+      "campaign management"
+    ],
+    "company_email": "energymart@gmail.com",
+    "experience_level": "Mid-level",
+    "id": "2",
+    "created_date": "2026-02-09T02:55:48.054759",
+    "status": "open",
+    "company_name": "Company"
+  },
+  {
+    "title": "DEveloper",
+    "description": "We are looking for a skilled and motivated Developer to join our on-site team. The ideal candidate will be responsible for developing, maintaining, and improving web applications. You should be comfortable working with modern web technologies, writing clean code, and collaborating with the team to deliver high-quality solutions.",
+    "requirements": [
+      "HTML, CSS, JavaScript ka strong knowledge",
+      "WordPress development ka experience",
+      "Basic PHP knowledge",
+      "Website customization aur bug fixing ka experience",
+      "Responsive design ka experience",
+      "API integration ka basic knowledge",
+      "Problem-solving skills",
+      "Team ke sath kaam kar sakta ho",
+      "On-site kaam kar sakta ho",
+      "Clean aur maintainable code likhna aata ho"
+    ],
+    "location": "Hybrid",
+    "salary": "50000",
+    "tags": [
+      "developer",
+      "web developer",
+      "wordpress developer",
+      "php developer",
+      "frontend developer",
+      "html",
+      "css",
+      "javascript",
+      "on-site job",
+      "mid level"
+    ],
+    "company_email": "energymart@gmail.com",
+    "experience_level": "Mid-level",
+    "id": "3",
+    "created_date": "2026-02-09T03:35:24.302789",
+    "status": "open",
+    "company_name": "energymart"
+  }
+]
