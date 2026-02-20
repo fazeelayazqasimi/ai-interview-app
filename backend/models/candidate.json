@@ -9,5 +9,23 @@
     "email": "fazeel@gmail.com",
     "password": "123456",
     "type": "candidate"
+  },
+  {
+    "email": "tabish@gmail.com",
+    "password": "123456",
+    "type": "candidate",
+    "name": "Tabish"
+  },
+  {
+    "email": "ali@gmail.com",
+    "password": "123456",
+    "type": "candidate",
+    "name": "Ali"
+  },
+  {
+    "email": "riz@gmail.com",
+    "password": "123456",
+    "type": "candidate",
+    "name": "rizwan"
   }
 ]

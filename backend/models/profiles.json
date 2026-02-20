@@ -13,5 +13,22 @@
     "resume_url": "",
     "phone": "",
     "location": ""
+  },
+  {
+    "email": "tabish@gmail.com",
+    "name": "Tabish",
+    "skills": [
+      "React",
+      "Nodejs",
+      "MongoDB"
+    ],
+    "experience": "ABC",
+    "education": "Inter",
+    "bio": "",
+    "resume_url": "",
+    "phone": "",
+    "location": "",
+    "updated_at": "2026-02-10T01:26:03.410014",
+    "created_at": "2026-02-10T01:26:03.411133"
   }
 ]

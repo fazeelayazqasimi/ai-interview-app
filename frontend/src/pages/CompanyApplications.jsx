@@ -11,6 +11,10 @@ export default function CompanyApplications() {
   const [applications, setApplications] = useState([]);
   const [loading, setLoading] = useState(true);
   const [stats, setStats] = useState(null);
+  const [viewingCandidate, setViewingCandidate] = useState(null);
+  const [candidateInterviews, setCandidateInterviews] = useState([]);
+  const [showInterviewModal, setShowInterviewModal] = useState(false);
+  const [selectedApplication, setSelectedApplication] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -33,15 +37,12 @@ export default function CompanyApplications() {
   const fetchCompanyData = async (email) => {
     try {
       // Fetch company's jobs
-      const jobsResponse = await axios.get(`${API_BASE_URL}/jobs`);
-      const companyJobs = jobsResponse.data.jobs.filter(job => 
-        job.company_email === email
-      );
-      setJobs(companyJobs);
+      const jobsResponse = await axios.get(`${API_BASE_URL}/jobs/company/${email}`);
+      setJobs(jobsResponse.data.jobs || []);
       
-      if (companyJobs.length > 0) {
-        setSelectedJob(companyJobs[0]);
-        fetchApplicationsForJob(companyJobs[0].id);
+      if (jobsResponse.data.jobs && jobsResponse.data.jobs.length > 0) {
+        setSelectedJob(jobsResponse.data.jobs[0]);
+        fetchApplicationsForJob(jobsResponse.data.jobs[0].id);
       }
       
       // Fetch analytics
@@ -72,16 +73,26 @@ export default function CompanyApplications() {
 
   const updateApplicationStatus = async (applicationId, newStatus) => {
     try {
-      // In real app, you would have an endpoint for this
-      alert(`Status updated to: ${newStatus}\n\nIn a real application, this would update in the database.`);
+      const response = await axios.put(
+        `${API_BASE_URL}/applications/${applicationId}/status`,
+        {
+          application_id: applicationId,
+          status: newStatus,
+          updated_by: user.email,
+          message: `Status changed to ${newStatus}`
+        }
+      );
       
       // Update local state
       setApplications(prev => prev.map(app => 
         app.id === applicationId ? { ...app, status: newStatus } : app
       ));
+      
+      alert(`Status updated to: ${newStatus}`);
+      
     } catch (error) {
       console.error("Error updating status:", error);
-      alert("Failed to update status");
+      alert("Failed to update status. Please try again.");
     }
   };
 
@@ -89,15 +100,137 @@ export default function CompanyApplications() {
     if (!selectedJob || !application.candidate_profile) return 0;
     
     const jobTags = selectedJob.tags || [];
+    const jobRequirements = selectedJob.requirements || [];
     const candidateSkills = application.candidate_profile.skills || [];
     
-    // Simple matching algorithm
-    const matches = candidateSkills.filter(skill => 
-      jobTags.some(tag => tag.toLowerCase().includes(skill.toLowerCase()) ||
-                         skill.toLowerCase().includes(tag.toLowerCase()))
+    const jobKeywords = [...jobTags, ...jobRequirements.join(" ").toLowerCase().split(/\s+/)];
+    const candidateKeywords = candidateSkills.map(skill => skill.toLowerCase());
+    
+    const matches = candidateKeywords.filter(skill => 
+      jobKeywords.some(keyword => 
+        skill.includes(keyword) || keyword.includes(skill)
+      )
     );
     
-    return jobTags.length > 0 ? Math.round((matches.length / jobTags.length) * 100) : 0;
+    return jobKeywords.length > 0 ? Math.round((matches.length / jobKeywords.length) * 100) : 0;
+  };
+
+  const viewCandidateDetails = async (application) => {
+    setSelectedApplication(application);
+    setViewingCandidate(application);
+    
+    try {
+      // Fetch candidate's interviews
+      const response = await axios.get(`${API_BASE_URL}/interviews/candidate/${application.candidate_email}`);
+      setCandidateInterviews(response.data.interviews || []);
+    } catch (error) {
+      console.error("Error fetching candidate interviews:", error);
+      setCandidateInterviews([]);
+    }
+    
+    setShowInterviewModal(true);
+  };
+
+  const scheduleInterview = (application) => {
+    const confirmSchedule = window.confirm(
+      `Schedule interview for ${application.candidate_profile?.name || application.candidate_email}?\n\n` +
+      `Job: ${selectedJob?.title}\n` +
+      `Candidate will be notified about the interview.`
+    );
+    
+    if (confirmSchedule) {
+      updateApplicationStatus(application.id, "interview_scheduled");
+      alert("Interview scheduled! The candidate will be notified.");
+    }
+  };
+
+  const getStatusColor = (status) => {
+    switch (status) {
+      case "applied": return "#ff9900";
+      case "reviewed": return "#0066ff";
+      case "interview_scheduled": return "#9c27b0";
+      case "interview_completed": return "#2196f3";
+      case "accepted": return "#4caf50";
+      case "rejected": return "#f44336";
+      default: return "#666";
+    }
+  };
+
+  const getStatusLabel = (status) => {
+    switch (status) {
+      case "applied": return "Applied";
+      case "reviewed": return "Under Review";
+      case "interview_scheduled": return "Interview Scheduled";
+      case "interview_completed": return "Interview Completed";
+      case "accepted": return "Accepted";
+      case "rejected": return "Rejected";
+      default: return status;
+    }
+  };
+
+  const getPerformanceBadge = (performance) => {
+    const performanceMap = {
+      "Excellent": { color: "#4caf50", bg: "#e8f5e9" },
+      "Good": { color: "#2196f3", bg: "#e3f2fd" },
+      "Average": { color: "#ff9800", bg: "#fff3e0" },
+      "Needs Improvement": { color: "#f44336", bg: "#ffebee" }
+    };
+    
+    const config = performanceMap[performance] || { color: "#666", bg: "#f5f5f5" };
+    
+    return (
+      <span className="performance-badge" style={{ 
+        color: config.color, 
+        background: config.bg,
+        border: `1px solid ${config.color}`,
+        padding: "4px 12px",
+        borderRadius: "20px",
+        fontSize: "12px",
+        fontWeight: "600"
+      }}>
+        {performance}
+      </span>
+    );
+  };
+
+  const renderInterviewScore = (application) => {
+    if (!application.latest_interview) return null;
+    
+    const interview = application.latest_interview;
+    
+    return (
+      <div className="interview-score-display">
+        <div className="score-header">
+          <span className="score-icon">🎯</span>
+          <span className="score-title">Interview Score</span>
+        </div>
+        <div className="score-details">
+          <div className="score-item">
+            <span>Score:</span>
+            <strong>{interview.score}/{interview.max_score}</strong>
+          </div>
+          <div className="score-item">
+            <span>Percentage:</span>
+            <strong className="score-percentage">{interview.percentage}%</strong>
+          </div>
+          <div className="score-item">
+            <span>Performance:</span>
+            {getPerformanceBadge(interview.performance)}
+          </div>
+          <div className="score-item">
+            <span>Completed:</span>
+            <span>{new Date(interview.completed_at).toLocaleDateString()}</span>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
+  const closeCandidateModal = () => {
+    setShowInterviewModal(false);
+    setViewingCandidate(null);
+    setCandidateInterviews([]);
+    setSelectedApplication(null);
   };
 
   if (loading) {
@@ -140,8 +273,8 @@ export default function CompanyApplications() {
             <p>Total Applications</p>
           </div>
           <div className="company-stat-card">
-            <h3>{stats.pending_review}</h3>
-            <p>Pending Review</p>
+            <h3>{stats.interview_completed}</h3>
+            <p>Interviews Completed</p>
           </div>
         </div>
       )}
@@ -174,7 +307,7 @@ export default function CompanyApplications() {
                     <span className={`status ${job.status}`}>{job.status}</span>
                   </div>
                   <p className="applications-count">
-                    📄 {applications.filter(a => a.job_id === job.id).length} applications
+                    📄 {applications.length} applications
                   </p>
                 </div>
               ))
@@ -200,13 +333,13 @@ export default function CompanyApplications() {
                   <span className="applications-count">
                     {applications.length} Applications
                   </span>
-                  <span className="match-rate">
-                    Avg Match: {calculateAverageMatch()}%
+                  <span className="interview-stats">
+                    🎯 {applications.filter(app => app.status === "interview_completed").length} Interviews Completed
                   </span>
                 </div>
               </div>
 
-              <div className="applications-table">
+              <div className="applications-table-container">
                 {applications.length === 0 ? (
                   <div className="no-applications">
                     <div className="empty-icon">📭</div>
@@ -214,26 +347,27 @@ export default function CompanyApplications() {
                     <p>No one has applied for this job yet.</p>
                   </div>
                 ) : (
-                  <>
-                    <div className="table-header">
-                      <div className="table-row">
-                        <div className="table-cell">Candidate</div>
-                        <div className="table-cell">Match Score</div>
-                        <div className="table-cell">Skills</div>
-                        <div className="table-cell">Applied Date</div>
-                        <div className="table-cell">Status</div>
-                        <div className="table-cell">Actions</div>
-                      </div>
-                    </div>
-                    
-                    <div className="table-body">
+                  <table className="applications-table">
+                    <thead>
+                      <tr>
+                        <th>Candidate</th>
+                        <th>Match Score</th>
+                        <th>Skills</th>
+                        <th>Applied Date</th>
+                        <th>Status</th>
+                        <th>Interview Score</th>
+                        <th>Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody>
                       {applications.map((application, index) => {
                         const matchScore = calculateMatchScore(application);
                         const profile = application.candidate_profile || {};
+                        const hasInterview = application.latest_interview;
                         
                         return (
-                          <div key={application.id || index} className="table-row application-row">
-                            <div className="table-cell candidate-info">
+                          <tr key={application.id || index} className="application-row">
+                            <td className="candidate-info">
                               <div className="candidate-avatar">
                                 {profile.name ? profile.name.charAt(0).toUpperCase() : "C"}
                               </div>
@@ -241,9 +375,9 @@ export default function CompanyApplications() {
                                 <h4>{profile.name || "Candidate"}</h4>
                                 <p className="candidate-email">{application.candidate_email}</p>
                               </div>
-                            </div>
+                            </td>
                             
-                            <div className="table-cell">
+                            <td>
                               <div className="match-score">
                                 <div className="score-bar">
                                   <div 
@@ -253,9 +387,9 @@ export default function CompanyApplications() {
                                 </div>
                                 <span className="score-text">{matchScore}%</span>
                               </div>
-                            </div>
+                            </td>
                             
-                            <div className="table-cell">
+                            <td>
                               <div className="skills-preview">
                                 {(profile.skills || []).slice(0, 3).map((skill, i) => (
                                   <span key={i} className="skill-tag">{skill}</span>
@@ -264,46 +398,74 @@ export default function CompanyApplications() {
                                   <span className="more-skills">+{(profile.skills || []).length - 3} more</span>
                                 )}
                               </div>
-                            </div>
+                            </td>
                             
-                            <div className="table-cell">
+                            <td>
                               {new Date(application.applied_date).toLocaleDateString()}
-                            </div>
+                            </td>
                             
-                            <div className="table-cell">
-                              <select 
-                                value={application.status || "applied"}
-                                onChange={(e) => updateApplicationStatus(application.id, e.target.value)}
-                                className="status-select"
-                              >
-                                <option value="applied">Applied</option>
-                                <option value="reviewed">Under Review</option>
-                                <option value="accepted">Accepted</option>
-                                <option value="rejected">Rejected</option>
-                              </select>
-                            </div>
+                            <td>
+                              <div className="status-container">
+                                <select 
+                                  value={application.status || "applied"}
+                                  onChange={(e) => updateApplicationStatus(application.id, e.target.value)}
+                                  className="status-select"
+                                  style={{ borderColor: getStatusColor(application.status) }}
+                                >
+                                  <option value="applied">Applied</option>
+                                  <option value="reviewed">Under Review</option>
+                                  <option value="interview_scheduled">Interview Scheduled</option>
+                                  <option value="interview_completed">Interview Completed</option>
+                                  <option value="accepted">Accepted</option>
+                                  <option value="rejected">Rejected</option>
+                                </select>
+                                <span 
+                                  className="status-indicator"
+                                  style={{ background: getStatusColor(application.status) }}
+                                ></span>
+                              </div>
+                            </td>
                             
-                            <div className="table-cell">
+                            <td>
+                              {hasInterview ? (
+                                <div className="interview-score-preview">
+                                  <div className="score-circle-small">
+                                    <span className="score-percent-small">
+                                      {application.latest_interview.percentage}%
+                                    </span>
+                                  </div>
+                                  <span className="performance-small">
+                                    {application.latest_interview.performance}
+                                  </span>
+                                </div>
+                              ) : (
+                                <span className="no-interview">No Interview</span>
+                              )}
+                            </td>
+                            
+                            <td>
                               <div className="action-buttons">
                                 <button 
                                   className="view-profile-btn"
-                                  onClick={() => alert(`Viewing profile of ${profile.name || application.candidate_email}`)}
+                                  onClick={() => viewCandidateDetails(application)}
                                 >
-                                  View Profile
+                                  View Details
                                 </button>
-                                <button 
-                                  className="schedule-btn"
-                                  onClick={() => alert(`Schedule interview with ${profile.name || application.candidate_email}`)}
-                                >
-                                  Schedule Interview
-                                </button>
+                                {application.status === "reviewed" && (
+                                  <button 
+                                    className="schedule-btn"
+                                    onClick={() => scheduleInterview(application)}
+                                  >
+                                    Schedule Interview
+                                  </button>
+                                )}
                               </div>
-                            </div>
-                          </div>
+                            </td>
+                          </tr>
                         );
                       })}
-                    </div>
-                  </>
+                    </tbody>
+                  </table>
                 )}
               </div>
             </>
@@ -318,16 +480,152 @@ export default function CompanyApplications() {
           )}
         </div>
       </div>
+
+      {/* Candidate Details Modal */}
+      {showInterviewModal && viewingCandidate && (
+        <div className="candidate-modal-overlay">
+          <div className="candidate-modal">
+            <div className="modal-header">
+              <h2>Candidate Details</h2>
+              <button className="close-modal" onClick={closeCandidateModal}>✕</button>
+            </div>
+            
+            <div className="modal-content">
+              <div className="candidate-profile">
+                <div className="profile-header">
+                  <div className="profile-avatar">
+                    {viewingCandidate.candidate_profile?.name?.charAt(0).toUpperCase() || "C"}
+                  </div>
+                  <div>
+                    <h3>{viewingCandidate.candidate_profile?.name || "Candidate"}</h3>
+                    <p className="profile-email">{viewingCandidate.candidate_email}</p>
+                    <p className="profile-status">
+                      Status: <span style={{ color: getStatusColor(viewingCandidate.status) }}>
+                        {getStatusLabel(viewingCandidate.status)}
+                      </span>
+                    </p>
+                    <p className="match-score-display">
+                      Match Score: <strong>{calculateMatchScore(viewingCandidate)}%</strong>
+                    </p>
+                  </div>
+                </div>
+                
+                <div className="profile-details">
+                  <div className="detail-section">
+                    <h4>📝 Cover Letter</h4>
+                    <p className="cover-letter">
+                      {viewingCandidate.cover_letter || "No cover letter provided."}
+                    </p>
+                  </div>
+                  
+                  <div className="detail-section">
+                    <h4>🛠️ Skills</h4>
+                    <div className="skills-list">
+                      {(viewingCandidate.candidate_profile?.skills || []).map((skill, index) => (
+                        <span key={index} className="skill-tag-large">{skill}</span>
+                      ))}
+                    </div>
+                  </div>
+                  
+                  <div className="detail-section">
+                    <h4>📊 Application Info</h4>
+                    <div className="info-grid">
+                      <div className="info-item">
+                        <span className="info-label">Applied Date:</span>
+                        <span className="info-value">
+                          {new Date(viewingCandidate.applied_date).toLocaleDateString()}
+                        </span>
+                      </div>
+                      <div className="info-item">
+                        <span className="info-label">Job:</span>
+                        <span className="info-value">{selectedJob?.title}</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              {/* Interview History */}
+              {candidateInterviews.length > 0 ? (
+                <div className="interview-history">
+                  <h3>🎯 Interview History</h3>
+                  <div className="interviews-list">
+                    {candidateInterviews.map((interview, index) => (
+                      <div key={index} className="interview-card">
+                        <div className="interview-header">
+                          <span className="interview-title">Interview #{index + 1}</span>
+                          <span className="interview-date">
+                            {new Date(interview.completed_at).toLocaleDateString()}
+                          </span>
+                        </div>
+                        <div className="interview-scores">
+                          <div className="score-item-modal">
+                            <span>Score:</span>
+                            <strong>{interview.score}/{interview.max_score}</strong>
+                          </div>
+                          <div className="score-item-modal">
+                            <span>Percentage:</span>
+                            <strong className="score-percentage-modal">
+                              {interview.percentage}%
+                            </strong>
+                          </div>
+                          <div className="score-item-modal">
+                            <span>Performance:</span>
+                            {getPerformanceBadge(interview.performance)}
+                          </div>
+                          <div className="score-item-modal">
+                            <span>Job:</span>
+                            <span>{interview.job_title}</span>
+                          </div>
+                        </div>
+                        {interview.answers && interview.answers.slice(0, 2).map((answer, idx) => (
+                          <div key={idx} className="answer-preview">
+                            <p><strong>Q:</strong> {answer.question?.substring(0, 80)}...</p>
+                            <p><strong>A:</strong> {answer.answer?.substring(0, 100)}...</p>
+                          </div>
+                        ))}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ) : (
+                <div className="no-interviews">
+                  <p>No interview history available for this candidate.</p>
+                </div>
+              )}
+            </div>
+            
+            <div className="modal-actions">
+              <button 
+                className="update-status-btn"
+                onClick={() => {
+                  const newStatus = prompt("Enter new status (applied, reviewed, interview_scheduled, interview_completed, accepted, rejected):", viewingCandidate.status);
+                  if (newStatus && ["applied", "reviewed", "interview_scheduled", "interview_completed", "accepted", "rejected"].includes(newStatus)) {
+                    updateApplicationStatus(viewingCandidate.id, newStatus);
+                    closeCandidateModal();
+                  }
+                }}
+              >
+                Update Status
+              </button>
+              {viewingCandidate.status === "reviewed" && (
+                <button 
+                  className="schedule-modal-btn"
+                  onClick={() => scheduleInterview(viewingCandidate)}
+                >
+                  Schedule Interview
+                </button>
+              )}
+              <button 
+                className="close-btn"
+                onClick={closeCandidateModal}
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
-
-  function calculateAverageMatch() {
-    if (applications.length === 0) return 0;
-    
-    const total = applications.reduce((sum, app) => {
-      return sum + calculateMatchScore(app);
-    }, 0);
-    
-    return Math.round(total / applications.length);
-  }
 }

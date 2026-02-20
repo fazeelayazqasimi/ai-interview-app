@@ -14,6 +14,7 @@ import JobListings from "./pages/JobListings";
 import CandidateProfileView from "./pages/CandidateProfileView";
 import NotificationsPage from "./pages/NotificationsPage";
 import Contact from "./pages/Contact";
+import InterviewPage from './pages/InterviewPage';
 import "./App.css";
 
 function App() {
@@ -35,6 +36,7 @@ function App() {
             <Route path="/job-listings" element={<JobListings />} />
             <Route path="/candidate/:candidateEmail" element={<CandidateProfileView />} />
             <Route path="/notifications" element={<NotificationsPage />} />
+            <Route path="/interview/:applicationId" element={<InterviewPage />} />
             <Route path="/contact" element={<Contact />} />
           </Routes>
         </div>

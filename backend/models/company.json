@@ -4,5 +4,11 @@
     "email": "energymart@gmail.com",
     "password": "123456",
     "type": "company"
+  },
+  {
+    "email": "mihwar@gmail.com",
+    "password": "123456",
+    "type": "company",
+    "name": "Mihwar Digital"
   }
 ]

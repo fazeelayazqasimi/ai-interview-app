@@ -1,0 +1,109 @@
+[
+  {
+    "candidate_email": "ali@gmail.com",
+    "job_id": "4",
+    "application_id": "6",
+    "score": 10.0,
+    "max_score": 35.0,
+    "percentage": 28.81,
+    "performance": "Needs Improvement",
+    "answers": [
+      {
+        "question": "What tools do you use for prototyping and why?",
+        "answer": "basically i am using figma and doing some sketch ",
+        "type": "practical"
+      },
+      {
+        "question": "Explain the difference between UI and UX design.",
+        "answer": "i dont know",
+        "type": "conceptual"
+      },
+      {
+        "question": "What is responsive design and why is it important?",
+        "answer": "mobile version is called responsive",
+        "type": "conceptual"
+      }
+    ],
+    "time_taken": 68,
+    "id": "1",
+    "completed_at": "2026-02-10T03:02:53.574622"
+  },
+  {
+    "candidate_email": "tabish@gmail.com",
+    "job_id": "5",
+    "application_id": "7",
+    "score": 7.0,
+    "max_score": 65.0,
+    "percentage": 11.08,
+    "performance": "Needs Improvement",
+    "answers": [
+      {
+        "question": "Explain the concept of closures in JavaScript with an example.",
+        "answer": "i dont know",
+        "type": "coding"
+      },
+      {
+        "question": "What is the difference between let, const, and var in JavaScript?",
+        "answer": "i dont know\n",
+        "type": "coding"
+      },
+      {
+        "question": "What is the Virtual DOM in React and how does it improve performance?",
+        "answer": "yr idea nhi he",
+        "type": "conceptual"
+      },
+      {
+        "question": "Write a function to reverse a string in JavaScript.",
+        "answer": "basically currently i am learning ",
+        "type": "coding"
+      },
+      {
+        "question": "Explain RESTful API principles and best practices.",
+        "answer": "Rest API can be made on in that root folder",
+        "type": "conceptual"
+      }
+    ],
+    "time_taken": 143,
+    "id": "2",
+    "completed_at": "2026-02-13T23:46:44.567453"
+  },
+  {
+    "candidate_email": "riz@gmail.com",
+    "job_id": "5",
+    "application_id": "9",
+    "score": 53.0,
+    "max_score": 65.0,
+    "percentage": 81.15,
+    "performance": "Good",
+    "answers": [
+      {
+        "question": "What is the difference between let, const, and var in JavaScript?",
+        "answer": "var \u2192 Old way to declare variables. Function-scoped, can be redeclared and updated. Hoisted (accessible before declaration as undefined).\n\nlet \u2192 Modern variable. Block-scoped, can be updated but not redeclared in same scope. Hoisted but not usable before declaration.\n\nconst \u2192 Constant. Block-scoped, cannot be updated or redeclared. Must be initialized at declaration.",
+        "type": "coding"
+      },
+      {
+        "question": "What is the Virtual DOM in React and how does it improve performance?",
+        "answer": "When state/props change \u2192 React updates the Virtual DOM first.\n\nReact compares old vs new Virtual DOM (diffing).\n\nOnly the changed parts are updated in the real DOM.\n\nFewer direct DOM operations \u2192 faster UI updates.\n",
+        "type": "conceptual"
+      },
+      {
+        "question": "Explain the concept of closures in JavaScript with an example.",
+        "answer": "A closure is when a function remembers and can access variables from its outer scope even after the outer function has finished executing.\n",
+        "type": "coding"
+      },
+      {
+        "question": "Write a function to reverse a string in JavaScript.",
+        "answer": "1\ufe0f\u20e3 Using built-in methods (shortest):\n\nfunction reverseString(str) {\n  return str.split('').reverse().join('');\n}\n\nconsole.log(reverseString(\"hello\")); // \"olleh\"\n\n\n2\ufe0f\u20e3 Using a loop:\n\nfunction reverseString(str) {\n  let reversed = '';\n  for (let i = str.length - 1; i >= 0; i--) {\n    reversed += str[i];\n  }\n  return reversed;\n}\n",
+        "type": "coding"
+      },
+      {
+        "question": "Explain RESTful API principles and best practices.",
+        "answer": "1\ufe0f\u20e3 Principles of REST:\n\nStateless: Each request contains all info; server doesn\u2019t store client state.\n\nClient-Server Separation: Client handles UI, server handles data and logic.\n\nUniform Interface: Standard HTTP methods and URLs:\n\nGET \u2192 Read data\n\nPOST \u2192 Create data\n\nPUT/PATCH \u2192 Update data\n\nDELETE \u2192 Remove data\n\nResource-Based: Everything is a resource with a URL (/users, /products/123).\n\nCacheable: Responses can be cached to improve performance.\n\nLayered System: Can use intermediaries (load balancers, proxies) without changing API behavior.\n\n2\ufe0f\u20e3 Best Practices:\n\nUse nouns for endpoints, not verbs (/orders, not /getOrders).\n\nReturn HTTP status codes (200, 201, 400, 404, 500).\n\nSupport query parameters for filtering, sorting, pagination.\n\nUse JSON as the standard response format.\n\nImplement versioning (/v1/users) to avoid breaking changes.\n\nInclude meaningful error messages in responses.\n\nUse HTTPS for security and data integrity.",
+        "type": "conceptual"
+      }
+    ],
+    "time_taken": 140,
+    "id": "3",
+    "completed_at": "2026-02-17T22:11:15.482796"
+  }
+]

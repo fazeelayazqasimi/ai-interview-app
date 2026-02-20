@@ -1,7 +1,7 @@
 from fastapi import FastAPI, HTTPException, WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
-from typing import List, Optional, Dict
+from typing import List, Optional, Dict, Any
 from datetime import datetime, timedelta
 import json
 import os
@@ -74,6 +74,17 @@ class StatusUpdate(BaseModel):
     status: str
     message: Optional[str] = ""
     updated_by: str
+
+class InterviewCreate(BaseModel):
+    candidate_email: str
+    job_id: str
+    application_id: str
+    score: float
+    max_score: float
+    percentage: float
+    performance: str
+    answers: List[Dict[str, Any]]
+    time_taken: int
 
 # ------------------------
 # WebSocket Connection Manager
@@ -364,6 +375,153 @@ async def interview(question: InterviewQuestion):
         raise HTTPException(status_code=500, detail="AI service error")
 
 # ------------------------
+# INTERVIEW SYSTEM ENDPOINTS
+# ------------------------
+@app.post("/interviews/save")
+async def save_interview_results(interview_data: InterviewCreate):
+    """Save interview results"""
+    try:
+        # Check if application exists
+        applications = read_json_file("applications.json")
+        application = None
+        for app in applications:
+            if app.get("id") == interview_data.application_id:
+                application = app
+                break
+        
+        if not application:
+            raise HTTPException(status_code=404, detail="Application not found")
+        
+        # Read existing interviews
+        interviews = read_json_file("interviews.json")
+        
+        # Create new interview record
+        interview_dict = interview_data.dict()
+        interview_dict["id"] = get_next_id("interviews.json")
+        interview_dict["completed_at"] = datetime.now().isoformat()
+        
+        interviews.append(interview_dict)
+        
+        # Save interviews
+        write_json_file("interviews.json", interviews)
+        
+        # Update application status and score
+        for app in applications:
+            if app.get("id") == interview_data.application_id:
+                app["status"] = "interview_completed"
+                app["interview_score"] = interview_data.percentage
+                app["status_updated_at"] = datetime.now().isoformat()
+                app["status_updated_by"] = "system"
+                break
+        
+        write_json_file("applications.json", applications)
+        
+        # Notify company about interview completion
+        jobs = read_json_file("jobs.json")
+        job = next((j for j in jobs if j.get("id") == interview_data.job_id), {})
+        
+        notification = Notification(
+            user_email=job.get("company_email", ""),
+            user_type="company",
+            message=f"Interview completed for candidate: {interview_data.candidate_email}",
+            type="info",
+            data={
+                "application_id": interview_data.application_id,
+                "candidate_email": interview_data.candidate_email,
+                "job_id": interview_data.job_id,
+                "score": interview_data.percentage,
+                "performance": interview_data.performance
+            }
+        )
+        await create_notification(notification)
+        
+        # Also notify candidate
+        candidate_notification = Notification(
+            user_email=interview_data.candidate_email,
+            user_type="candidate",
+            message=f"Your interview for {job.get('title', 'job')} has been completed. Score: {interview_data.percentage}%",
+            type="info",
+            data={
+                "application_id": interview_data.application_id,
+                "job_id": interview_data.job_id,
+                "score": interview_data.percentage,
+                "performance": interview_data.performance
+            }
+        )
+        await create_notification(candidate_notification)
+        
+        return {
+            "success": True,
+            "message": "Interview results saved successfully",
+            "interview": interview_dict
+        }
+        
+    except Exception as e:
+        print(f"Save interview error: {str(e)}")
+        raise HTTPException(status_code=500, detail="Failed to save interview results")
+
+@app.get("/interviews/application/{application_id}")
+async def get_interviews_by_application(application_id: str):
+    """Get interviews for a specific application"""
+    try:
+        interviews = read_json_file("interviews.json")
+        application_interviews = [
+            interview for interview in interviews 
+            if interview.get("application_id") == application_id
+        ]
+        
+        # Sort by completion date
+        application_interviews.sort(key=lambda x: x.get("completed_at", ""), reverse=True)
+        
+        return {"interviews": application_interviews}
+    except Exception as e:
+        print(f"Get interviews error: {str(e)}")
+        raise HTTPException(status_code=500, detail="Failed to fetch interviews")
+
+@app.get("/interviews/candidate/{candidate_email}")
+async def get_interviews_by_candidate(candidate_email: str):
+    """Get all interviews for a candidate"""
+    try:
+        interviews = read_json_file("interviews.json")
+        candidate_interviews = [
+            interview for interview in interviews 
+            if interview.get("candidate_email") == candidate_email
+        ]
+        
+        # Get job details for each interview
+        jobs = read_json_file("jobs.json")
+        for interview in candidate_interviews:
+            job = next((j for j in jobs if j.get("id") == interview.get("job_id")), {})
+            interview["job_title"] = job.get("title", "")
+            interview["company_email"] = job.get("company_email", "")
+        
+        # Sort by completion date
+        candidate_interviews.sort(key=lambda x: x.get("completed_at", ""), reverse=True)
+        
+        return {"interviews": candidate_interviews}
+    except Exception as e:
+        print(f"Get candidate interviews error: {str(e)}")
+        raise HTTPException(status_code=500, detail="Failed to fetch interviews")
+
+@app.get("/interviews/job/{job_id}")
+async def get_interviews_by_job(job_id: str):
+    """Get all interviews for a job"""
+    try:
+        interviews = read_json_file("interviews.json")
+        job_interviews = [
+            interview for interview in interviews 
+            if interview.get("job_id") == job_id
+        ]
+        
+        # Sort by score
+        job_interviews.sort(key=lambda x: x.get("percentage", 0), reverse=True)
+        
+        return {"interviews": job_interviews}
+    except Exception as e:
+        print(f"Get job interviews error: {str(e)}")
+        raise HTTPException(status_code=500, detail="Failed to fetch interviews")
+
+# ------------------------
 # JOB ENDPOINTS
 # ------------------------
 @app.post("/jobs")
@@ -559,6 +717,20 @@ async def get_candidate_applications(email: str):
             job = next((j for j in jobs if j.get("id") == app.get("job_id")), {})
             app["job_details"] = job
         
+        # Get interview scores for each application
+        interviews = read_json_file("interviews.json")
+        for app in candidate_apps:
+            app_interviews = [i for i in interviews if i.get("application_id") == app.get("id")]
+            if app_interviews:
+                latest_interview = sorted(app_interviews, key=lambda x: x.get("completed_at", ""), reverse=True)[0]
+                app["latest_interview"] = {
+                    "score": latest_interview.get("score"),
+                    "max_score": latest_interview.get("max_score"),
+                    "percentage": latest_interview.get("percentage"),
+                    "performance": latest_interview.get("performance"),
+                    "completed_at": latest_interview.get("completed_at")
+                }
+        
         return {"applications": candidate_apps}
     except Exception as e:
         print(f"Get candidate applications error: {str(e)}")
@@ -575,6 +747,20 @@ async def get_job_applications(job_id: str):
         for app in job_apps:
             profile = next((p for p in profiles if p.get("email") == app.get("candidate_email")), {})
             app["candidate_profile"] = profile
+        
+        # Get interview scores for each application
+        interviews = read_json_file("interviews.json")
+        for app in job_apps:
+            app_interviews = [i for i in interviews if i.get("application_id") == app.get("id")]
+            if app_interviews:
+                latest_interview = sorted(app_interviews, key=lambda x: x.get("completed_at", ""), reverse=True)[0]
+                app["latest_interview"] = {
+                    "score": latest_interview.get("score"),
+                    "max_score": latest_interview.get("max_score"),
+                    "percentage": latest_interview.get("percentage"),
+                    "performance": latest_interview.get("performance"),
+                    "completed_at": latest_interview.get("completed_at")
+                }
         
         return {"applications": job_apps}
     except Exception as e:
@@ -804,13 +990,19 @@ async def get_candidate_analytics(email: str):
         applications = read_json_file("applications.json")
         candidate_apps = [app for app in applications if app.get("candidate_email") == email]
         
+        # Get interview count
+        interviews = read_json_file("interviews.json")
+        interview_count = len([i for i in interviews if i.get("candidate_email") == email])
+        
         stats = {
             "total_applications": len(candidate_apps),
             "applied": len([app for app in candidate_apps if app.get("status") == "applied"]),
             "reviewed": len([app for app in candidate_apps if app.get("status") == "reviewed"]),
-            "interview": len([app for app in candidate_apps if app.get("status") == "interview"]),
+            "interview_scheduled": len([app for app in candidate_apps if app.get("status") == "interview_scheduled"]),
+            "interview_completed": len([app for app in candidate_apps if app.get("status") == "interview_completed"]),
             "accepted": len([app for app in candidate_apps if app.get("status") == "accepted"]),
-            "rejected": len([app for app in candidate_apps if app.get("status") == "rejected"])
+            "rejected": len([app for app in candidate_apps if app.get("status") == "rejected"]),
+            "interview_count": interview_count
         }
         
         recent_apps = sorted(
@@ -837,6 +1029,13 @@ async def get_company_analytics(email: str):
         
         applications = read_json_file("applications.json")
         
+        # Get interview stats
+        interviews = read_json_file("interviews.json")
+        company_interviews = []
+        for job in company_jobs:
+            job_interviews = [i for i in interviews if i.get("job_id") == job.get("id")]
+            company_interviews.extend(job_interviews)
+        
         stats = {
             "total_jobs": len(company_jobs),
             "open_jobs": len([job for job in company_jobs if job.get("status") == "open"]),
@@ -844,7 +1043,10 @@ async def get_company_analytics(email: str):
             "total_applications": 0,
             "new_applications": 0,
             "interview_scheduled": 0,
-            "hired": 0
+            "interview_completed": 0,
+            "hired": 0,
+            "total_interviews": len(company_interviews),
+            "avg_interview_score": 0
         }
         
         company_applications = []
@@ -852,9 +1054,15 @@ async def get_company_analytics(email: str):
             job_apps = [app for app in applications if app.get("job_id") == job.get("id")]
             stats["total_applications"] += len(job_apps)
             stats["new_applications"] += len([app for app in job_apps if app.get("status") == "applied"])
-            stats["interview_scheduled"] += len([app for app in job_apps if app.get("status") == "interview"])
+            stats["interview_scheduled"] += len([app for app in job_apps if app.get("status") == "interview_scheduled"])
+            stats["interview_completed"] += len([app for app in job_apps if app.get("status") == "interview_completed"])
             stats["hired"] += len([app for app in job_apps if app.get("status") == "accepted"])
             company_applications.extend(job_apps)
+        
+        # Calculate average interview score
+        if company_interviews:
+            total_score = sum([i.get("percentage", 0) for i in company_interviews])
+            stats["avg_interview_score"] = round(total_score / len(company_interviews), 1)
         
         recent_apps = sorted(
             company_applications,
@@ -936,6 +1144,7 @@ async def get_stats():
         applications = len(read_json_file("applications.json"))
         profiles = len(read_json_file("profiles.json"))
         notifications = len(read_json_file("notifications.json"))
+        interviews = len(read_json_file("interviews.json"))
         
         return {
             "candidates": candidates,
@@ -943,7 +1152,8 @@ async def get_stats():
             "jobs": jobs,
             "applications": applications,
             "profiles": profiles,
-            "notifications": notifications
+            "notifications": notifications,
+            "interviews": interviews
         }
     except Exception as e:
         print(f"Get stats error: {str(e)}")
@@ -953,11 +1163,11 @@ async def get_stats():
 async def reset_data(data_type: str):
     """Reset data (for testing only)"""
     try:
-        if data_type not in ["candidate", "company", "jobs", "applications", "profiles", "notifications", "all"]:
+        if data_type not in ["candidate", "company", "jobs", "applications", "profiles", "notifications", "interviews", "all"]:
             raise HTTPException(status_code=400, detail="Invalid data type")
         
         if data_type == "all":
-            files = ["candidate.json", "company.json", "jobs.json", "applications.json", "profiles.json", "notifications.json"]
+            files = ["candidate.json", "company.json", "jobs.json", "applications.json", "profiles.json", "notifications.json", "interviews.json"]
             for file in files:
                 write_json_file(file, [])
             return {"message": "All data reset successfully"}
@@ -970,3 +1180,4 @@ async def reset_data(data_type: str):
     except Exception as e:
         print(f"Reset data error: {str(e)}")
         raise HTTPException(status_code=500, detail="Internal server error")
+        

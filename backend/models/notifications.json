@@ -14,5 +14,391 @@
     "id": "1",
     "created_at": "2026-02-09T03:36:11.605879",
     "read_at": "2026-02-09T03:36:54.804828"
+  },
+  {
+    "user_email": "energymart@gmail.com",
+    "user_type": "company",
+    "message": "New application received for MArketer",
+    "type": "info",
+    "read": false,
+    "data": {
+      "application_id": "4",
+      "job_id": "2",
+      "job_title": "MArketer",
+      "candidate_email": "tabish@gmail.com"
+    },
+    "id": "2",
+    "created_at": "2026-02-10T01:24:53.249418"
+  },
+  {
+    "user_email": "test@company.com",
+    "user_type": "company",
+    "message": "New application received for Frontend Developer",
+    "type": "info",
+    "read": false,
+    "data": {
+      "application_id": "5",
+      "job_id": "1",
+      "job_title": "Frontend Developer",
+      "candidate_email": "tabish@gmail.com"
+    },
+    "id": "3",
+    "created_at": "2026-02-10T02:00:18.297229"
+  },
+  {
+    "user_email": "tabish@gmail.com",
+    "user_type": "candidate",
+    "message": "Your application for MArketer status updated to 'rejected': Status changed to rejected",
+    "type": "info",
+    "read": false,
+    "data": {
+      "application_id": "4",
+      "job_id": "2",
+      "job_title": "MArketer",
+      "old_status": "applied",
+      "new_status": "rejected",
+      "company": "energymart@gmail.com"
+    },
+    "id": "4",
+    "created_at": "2026-02-10T02:35:47.489535"
+  },
+  {
+    "user_email": "fazeel@gmail.com",
+    "user_type": "candidate",
+    "message": "Your application for MArketer status updated to 'accepted': Status changed to accepted",
+    "type": "info",
+    "read": false,
+    "data": {
+      "application_id": "2",
+      "job_id": "2",
+      "job_title": "MArketer",
+      "old_status": "applied",
+      "new_status": "accepted",
+      "company": "energymart@gmail.com"
+    },
+    "id": "5",
+    "created_at": "2026-02-10T02:45:37.596290"
+  },
+  {
+    "user_email": "energymart@gmail.com",
+    "user_type": "company",
+    "message": "New application received for Designer",
+    "type": "info",
+    "read": false,
+    "data": {
+      "application_id": "6",
+      "job_id": "4",
+      "job_title": "Designer",
+      "candidate_email": "ali@gmail.com"
+    },
+    "id": "6",
+    "created_at": "2026-02-10T02:49:23.218460"
+  },
+  {
+    "user_email": "ali@gmail.com",
+    "user_type": "candidate",
+    "message": "Your application for Designer status updated to 'accepted': Status changed to accepted",
+    "type": "info",
+    "read": false,
+    "data": {
+      "application_id": "6",
+      "job_id": "4",
+      "job_title": "Designer",
+      "old_status": "applied",
+      "new_status": "accepted",
+      "company": "energymart@gmail.com"
+    },
+    "id": "7",
+    "created_at": "2026-02-10T02:49:59.612709"
+  },
+  {
+    "user_email": "energymart@gmail.com",
+    "user_type": "company",
+    "message": "Interview completed for candidate: ali@gmail.com",
+    "type": "info",
+    "read": true,
+    "data": {
+      "application_id": "6",
+      "candidate_email": "ali@gmail.com",
+      "job_id": "4",
+      "score": 28.81,
+      "performance": "Needs Improvement"
+    },
+    "id": "8",
+    "created_at": "2026-02-10T03:02:53.600433",
+    "read_at": "2026-02-10T03:05:08.712848"
+  },
+  {
+    "user_email": "ali@gmail.com",
+    "user_type": "candidate",
+    "message": "Your interview for Designer has been completed. Score: 28.81%",
+    "type": "info",
+    "read": false,
+    "data": {
+      "application_id": "6",
+      "job_id": "4",
+      "score": 28.81,
+      "performance": "Needs Improvement"
+    },
+    "id": "9",
+    "created_at": "2026-02-10T03:02:53.611971"
+  },
+  {
+    "user_email": "ali@gmail.com",
+    "user_type": "candidate",
+    "message": "Your application for Designer status updated to 'accepted': Status changed to accepted",
+    "type": "info",
+    "read": false,
+    "data": {
+      "application_id": "6",
+      "job_id": "4",
+      "job_title": "Designer",
+      "old_status": "interview_completed",
+      "new_status": "accepted",
+      "company": "energymart@gmail.com"
+    },
+    "id": "10",
+    "created_at": "2026-02-10T03:10:14.397078"
+  },
+  {
+    "user_email": "fazeel@gmail.com",
+    "user_type": "candidate",
+    "message": "New job matches your skills: Developer",
+    "type": "info",
+    "read": false,
+    "data": {
+      "job_id": "5",
+      "job_title": "Developer",
+      "company": "mihwar@gmail.com",
+      "match_reason": "Your skills match this job"
+    },
+    "id": "11",
+    "created_at": "2026-02-13T23:40:55.550848"
+  },
+  {
+    "user_email": "tabish@gmail.com",
+    "user_type": "candidate",
+    "message": "New job matches your skills: Developer",
+    "type": "info",
+    "read": false,
+    "data": {
+      "job_id": "5",
+      "job_title": "Developer",
+      "company": "mihwar@gmail.com",
+      "match_reason": "Your skills match this job"
+    },
+    "id": "12",
+    "created_at": "2026-02-13T23:40:55.575061"
+  },
+  {
+    "user_email": "mihwar@gmail.com",
+    "user_type": "company",
+    "message": "New application received for Developer",
+    "type": "info",
+    "read": true,
+    "data": {
+      "application_id": "7",
+      "job_id": "5",
+      "job_title": "Developer",
+      "candidate_email": "tabish@gmail.com"
+    },
+    "id": "13",
+    "created_at": "2026-02-13T23:41:20.845025",
+    "read_at": "2026-02-13T23:47:44.735062"
+  },
+  {
+    "user_email": "tabish@gmail.com",
+    "user_type": "candidate",
+    "message": "Your application for Developer status updated to 'interview_scheduled': Status changed to interview_scheduled",
+    "type": "info",
+    "read": false,
+    "data": {
+      "application_id": "7",
+      "job_id": "5",
+      "job_title": "Developer",
+      "old_status": "applied",
+      "new_status": "interview_scheduled",
+      "company": "mihwar@gmail.com"
+    },
+    "id": "14",
+    "created_at": "2026-02-13T23:42:45.930316"
+  },
+  {
+    "user_email": "tabish@gmail.com",
+    "user_type": "candidate",
+    "message": "Your application for Developer status updated to 'accepted': Status changed to accepted",
+    "type": "info",
+    "read": false,
+    "data": {
+      "application_id": "7",
+      "job_id": "5",
+      "job_title": "Developer",
+      "old_status": "interview_scheduled",
+      "new_status": "accepted",
+      "company": "mihwar@gmail.com"
+    },
+    "id": "15",
+    "created_at": "2026-02-13T23:43:49.241776"
+  },
+  {
+    "user_email": "mihwar@gmail.com",
+    "user_type": "company",
+    "message": "Interview completed for candidate: tabish@gmail.com",
+    "type": "info",
+    "read": true,
+    "data": {
+      "application_id": "7",
+      "candidate_email": "tabish@gmail.com",
+      "job_id": "5",
+      "score": 11.08,
+      "performance": "Needs Improvement"
+    },
+    "id": "16",
+    "created_at": "2026-02-13T23:46:44.598705",
+    "read_at": "2026-02-13T23:47:48.860764"
+  },
+  {
+    "user_email": "tabish@gmail.com",
+    "user_type": "candidate",
+    "message": "Your interview for Developer has been completed. Score: 11.08%",
+    "type": "info",
+    "read": false,
+    "data": {
+      "application_id": "7",
+      "job_id": "5",
+      "score": 11.08,
+      "performance": "Needs Improvement"
+    },
+    "id": "17",
+    "created_at": "2026-02-13T23:46:44.632565"
+  },
+  {
+    "user_email": "tabish@gmail.com",
+    "user_type": "candidate",
+    "message": "Your application for Developer status updated to 'rejected': Status changed to rejected",
+    "type": "info",
+    "read": false,
+    "data": {
+      "application_id": "7",
+      "job_id": "5",
+      "job_title": "Developer",
+      "old_status": "interview_completed",
+      "new_status": "rejected",
+      "company": "mihwar@gmail.com"
+    },
+    "id": "18",
+    "created_at": "2026-02-13T23:48:51.577909"
+  },
+  {
+    "user_email": "test@company.com",
+    "user_type": "company",
+    "message": "New application received for Frontend Developer",
+    "type": "info",
+    "read": false,
+    "data": {
+      "application_id": "8",
+      "job_id": "1",
+      "job_title": "Frontend Developer",
+      "candidate_email": "riz@gmail.com"
+    },
+    "id": "19",
+    "created_at": "2026-02-17T22:04:07.174109"
+  },
+  {
+    "user_email": "mihwar@gmail.com",
+    "user_type": "company",
+    "message": "New application received for Developer",
+    "type": "info",
+    "read": false,
+    "data": {
+      "application_id": "9",
+      "job_id": "5",
+      "job_title": "Developer",
+      "candidate_email": "riz@gmail.com"
+    },
+    "id": "20",
+    "created_at": "2026-02-17T22:05:44.293175"
+  },
+  {
+    "user_email": "riz@gmail.com",
+    "user_type": "candidate",
+    "message": "Your application for Developer status updated to 'interview_scheduled': Status changed to interview_scheduled",
+    "type": "info",
+    "read": false,
+    "data": {
+      "application_id": "9",
+      "job_id": "5",
+      "job_title": "Developer",
+      "old_status": "applied",
+      "new_status": "interview_scheduled",
+      "company": "mihwar@gmail.com"
+    },
+    "id": "21",
+    "created_at": "2026-02-17T22:07:28.083082"
+  },
+  {
+    "user_email": "riz@gmail.com",
+    "user_type": "candidate",
+    "message": "Your application for Developer status updated to 'accepted': Status changed to accepted",
+    "type": "info",
+    "read": false,
+    "data": {
+      "application_id": "9",
+      "job_id": "5",
+      "job_title": "Developer",
+      "old_status": "interview_scheduled",
+      "new_status": "accepted",
+      "company": "mihwar@gmail.com"
+    },
+    "id": "22",
+    "created_at": "2026-02-17T22:07:31.897952"
+  },
+  {
+    "user_email": "mihwar@gmail.com",
+    "user_type": "company",
+    "message": "Interview completed for candidate: riz@gmail.com",
+    "type": "info",
+    "read": false,
+    "data": {
+      "application_id": "9",
+      "candidate_email": "riz@gmail.com",
+      "job_id": "5",
+      "score": 81.15,
+      "performance": "Good"
+    },
+    "id": "23",
+    "created_at": "2026-02-17T22:11:15.517825"
+  },
+  {
+    "user_email": "riz@gmail.com",
+    "user_type": "candidate",
+    "message": "Your interview for Developer has been completed. Score: 81.15%",
+    "type": "info",
+    "read": false,
+    "data": {
+      "application_id": "9",
+      "job_id": "5",
+      "score": 81.15,
+      "performance": "Good"
+    },
+    "id": "24",
+    "created_at": "2026-02-17T22:11:15.547299"
+  },
+  {
+    "user_email": "riz@gmail.com",
+    "user_type": "candidate",
+    "message": "Your application for Developer status updated to 'accepted': Status changed to accepted",
+    "type": "info",
+    "read": false,
+    "data": {
+      "application_id": "9",
+      "job_id": "5",
+      "job_title": "Developer",
+      "old_status": "interview_completed",
+      "new_status": "accepted",
+      "company": "mihwar@gmail.com"
+    },
+    "id": "25",
+    "created_at": "2026-02-17T22:12:53.441756"
   }
 ]

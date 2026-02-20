@@ -11,9 +11,12 @@
     "job_id": "2",
     "candidate_email": "fazeel@gmail.com",
     "cover_letter": "I'm interested in the MArketer position at Company",
-    "status": "applied",
+    "status": "accepted",
     "id": "2",
-    "applied_date": "2026-02-09T02:56:51.153124"
+    "applied_date": "2026-02-09T02:56:51.153124",
+    "status_updated_at": "2026-02-10T02:45:37.578141",
+    "status_updated_by": "energymart@gmail.com",
+    "status_message": "Status changed to accepted"
   },
   {
     "job_id": "3",
@@ -22,5 +25,68 @@
     "status": "applied",
     "id": "3",
     "applied_date": "2026-02-09T03:36:11.604880"
+  },
+  {
+    "job_id": "2",
+    "candidate_email": "tabish@gmail.com",
+    "cover_letter": "I'm interested in the MArketer position at Company",
+    "status": "rejected",
+    "id": "4",
+    "applied_date": "2026-02-10T01:24:53.239309",
+    "status_updated_at": "2026-02-10T02:35:47.441530",
+    "status_updated_by": "energymart@gmail.com",
+    "status_message": "Status changed to rejected"
+  },
+  {
+    "job_id": "1",
+    "candidate_email": "tabish@gmail.com",
+    "cover_letter": "I'm interested in the Frontend Developer position at Test Company",
+    "status": "applied",
+    "id": "5",
+    "applied_date": "2026-02-10T02:00:18.297229"
+  },
+  {
+    "job_id": "4",
+    "candidate_email": "ali@gmail.com",
+    "cover_letter": "I'm interested in the Designer position at energymart",
+    "status": "accepted",
+    "id": "6",
+    "applied_date": "2026-02-10T02:49:23.184878",
+    "status_updated_at": "2026-02-10T03:10:14.379416",
+    "status_updated_by": "energymart@gmail.com",
+    "status_message": "Status changed to accepted",
+    "interview_score": 28.81
+  },
+  {
+    "job_id": "5",
+    "candidate_email": "tabish@gmail.com",
+    "cover_letter": "I'm interested in the Developer position at mihwar",
+    "status": "rejected",
+    "id": "7",
+    "applied_date": "2026-02-13T23:41:20.821069",
+    "status_updated_at": "2026-02-13T23:48:51.550591",
+    "status_updated_by": "mihwar@gmail.com",
+    "status_message": "Status changed to rejected",
+    "interview_score": 11.08
+  },
+  {
+    "job_id": "1",
+    "candidate_email": "riz@gmail.com",
+    "cover_letter": "I'm interested in the Frontend Developer position at Test Company",
+    "status": "applied",
+    "id": "8",
+    "applied_date": "2026-02-17T22:04:07.149428"
+  },
+  {
+    "job_id": "5",
+    "candidate_email": "riz@gmail.com",
+    "cover_letter": "I'm interested in the Developer position at mihwar",
+    "status": "accepted",
+    "id": "9",
+    "applied_date": "2026-02-17T22:05:44.262460",
+    "status_updated_at": "2026-02-17T22:12:53.437459",
+    "status_updated_by": "mihwar@gmail.com",
+    "status_message": "Status changed to accepted",
+    "interview_score": 81.15
   }
 ]

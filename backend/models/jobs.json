@@ -94,5 +94,43 @@
     "created_date": "2026-02-09T03:35:24.302789",
     "status": "open",
     "company_name": "energymart"
+  },
+  {
+    "title": "Designer",
+    "description": "testing",
+    "requirements": [
+      "photoshop, AI"
+    ],
+    "location": "Hybrid",
+    "salary": "100k",
+    "tags": [],
+    "company_email": "energymart@gmail.com",
+    "experience_level": "Mid-level",
+    "id": "4",
+    "created_date": "2026-02-10T02:47:21.159350",
+    "status": "open",
+    "company_name": "energymart"
+  },
+  {
+    "title": "Developer",
+    "description": "testing",
+    "requirements": [
+      "react",
+      "nodejs",
+      "mongoDB"
+    ],
+    "location": "Hybrid",
+    "salary": "1000000",
+    "tags": [
+      "react",
+      "nodejs",
+      "mongoDB"
+    ],
+    "company_email": "mihwar@gmail.com",
+    "experience_level": "Senior",
+    "id": "5",
+    "created_date": "2026-02-13T23:40:55.502982",
+    "status": "open",
+    "company_name": "mihwar"
   }
 ]
