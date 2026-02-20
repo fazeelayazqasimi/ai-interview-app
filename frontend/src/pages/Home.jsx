@@ -175,7 +175,7 @@ export default function Home() {
       <section className="hero-section">
         <div className="hero-content">
           <div className="hero-badge">
-            <span className="badge-text">Botboss</span>
+            <span className="badge-text">AI-Powered Hiring Platform</span>
           </div>
           <h1 className="hero-title">
             Transform Your Hiring with 
